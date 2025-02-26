@@ -1,24 +1,26 @@
 ﻿namespace AAT_calcs;
 
-// x = R * cos(lat) * cos(lon)
+// x = (N(∅) + h) * cos(∅) * cos(λ)
 //
-// y = R * cos(lat) * sin(lon)
+// y = (N(∅) + h) * cos(∅) * sin(λ)
 //
-// z = R *sin(lat)
+// z = ((1 - e²)N(∅) + h) *sin(∅)
+
 // a ( equatorial radius ) = 6378137.0 m
 // b ( polar radius ) = 6356752.3 m
 // e2 ( eccentricity ) = 1 - (b^2/a^2) => f = 1 - (b / a)
 
 public static class Mapping
 {
-    private const double a = 6378137.0;
-    private const double b = 6356752.3;
-    private const double e = 0.08181921804834474711755146934483;
+    private const double a = 6378137.0D;
+    private const double b = 6356752.3D;
+    private const double e = 0.08181921804834474711755146934483D;
+    private const double eSquared = 0.00669438444204258280946884516695D;
 
     private static double PrimeVerticalRadius(double latRadians)
     {
         // N(∅) = a / sqrt(1 - ((e^2) / (1 + cot^2(∅)))
-        double denominator =Math.Sqrt(1 - Math.Pow(e, 2) * Math.Pow(Math.Sin(latRadians), 2));
+        double denominator = Math.Sqrt(1 - eSquared * Math.Pow(Math.Sin(latRadians), 2));
         return a / denominator;
     }
 
@@ -32,7 +34,7 @@ public static class Mapping
         double pvr = PrimeVerticalRadius(latRadians);
         double x = (pvr + heightMeters)*Math.Cos(latRadians) * Math.Cos(lonRadians);
         double y = (pvr + heightMeters)*Math.Cos(latRadians) * Math.Sin(lonRadians);
-        double z = (((1 - Math.Pow(e,2)) * pvr) + heightMeters) * Math.Sin(latRadians);
+        double z = (((1 - eSquared) * pvr) + heightMeters) * Math.Sin(latRadians);
         return (x, y, z);
     }
 
