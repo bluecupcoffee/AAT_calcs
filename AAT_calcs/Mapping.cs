@@ -22,6 +22,7 @@ public static class Mapping
         return a / denominator;
     }
 
+    // gps coordinates mapped to cartesian space with origin set at earth center of mass
     public static (double X, double Y, double Z) MapToXyzTuple(double pLat, double pLon, double heightMeters = 0)
     {
         // ∅ = latitude
@@ -35,11 +36,13 @@ public static class Mapping
         return (x, y, z);
     }
 
+    // distance between 2 cartesian coordinates
     public static double CartesianCoordinateDistance(double ax, double ay, double az, double bx, double by, double bz)
     {
         return Math.Sqrt(Math.Pow(ax-bx, 2) + Math.Pow(ay-by, 2) + Math.Pow(az-bz, 2));
     }
 
+    // distance between 2 Gps coordinates
     public static double GpsCoordinateDistance(double aLat, double aLon, double aH, double bLat, double bLon,
         double bH)
     {
