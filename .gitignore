@@ -3,3 +3,5 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+.idea/
+AAT_calcs.sln.DotSettings.user
