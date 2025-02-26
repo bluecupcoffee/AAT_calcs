@@ -46,9 +46,9 @@ public static class Mapping
     public static double GpsCoordinateDistance(double aLat, double aLon, double aH, double bLat, double bLon,
         double bH)
     {
-        var a = MapToXyzTuple(aLat, aLon, aH);
-        var b = MapToXyzTuple(bLat, bLon, bH);
-        return CartesianCoordinateDistance(a.X, a.Y, a.Z, b.X, b.Y, b.Z);
+        var aTuple = MapToXyzTuple(aLat, aLon, aH);
+        var bTuple = MapToXyzTuple(bLat, bLon, bH);
+        return CartesianCoordinateDistance(aTuple.X, aTuple.Y, aTuple.Z, bTuple.X, bTuple.Y, bTuple.Z);
     }
     
 }
