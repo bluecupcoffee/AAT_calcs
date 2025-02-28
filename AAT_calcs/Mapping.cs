@@ -15,12 +15,12 @@ public static class Mapping
     private const double a = 6378137.0D;
     private const double b = 6356752.3D;
     private const double e = 0.08181921804834474711755146934483D;
-    private const double eSquared = 0.00669438444204258280946884516695D;
+    private const double ESquared = 0.00669438444204258280946884516695D;
 
     private static double PrimeVerticalRadius(double latRadians)
     {
         // N(∅) = a / sqrt(1 - ((e^2) / (1 + cot^2(∅)))
-        double denominator = Math.Sqrt(1 - eSquared * Math.Pow(Math.Sin(latRadians), 2));
+        double denominator = Math.Sqrt(1 - ESquared * Math.Pow(Math.Sin(latRadians), 2));
         return a / denominator;
     }
 
@@ -34,7 +34,7 @@ public static class Mapping
         double pvr = PrimeVerticalRadius(latRadians);
         double x = (pvr + heightMeters)*Math.Cos(latRadians) * Math.Cos(lonRadians);
         double y = (pvr + heightMeters)*Math.Cos(latRadians) * Math.Sin(lonRadians);
-        double z = (((1 - eSquared) * pvr) + heightMeters) * Math.Sin(latRadians);
+        double z = (((1 - ESquared) * pvr) + heightMeters) * Math.Sin(latRadians);
         return (x, y, z);
     }
 
@@ -51,6 +51,23 @@ public static class Mapping
         var aTuple = MapToXyzTuple(aLat, aLon, aH);
         var bTuple = MapToXyzTuple(bLat, bLon, bH);
         return CartesianCoordinateDistance(aTuple.X, aTuple.Y, aTuple.Z, bTuple.X, bTuple.Y, bTuple.Z);
+    }
+    
+    // perpendicular vector to prime vertical radius aligned north/south
+    public static (double X, double Y, double Z) Perpendicular3DVectorSolveFor2NdZ(
+        double x1, double y1, double z1, double x2 = 0, double y2 = 0
+        )
+    {
+        // perpedicular dot product = 0
+        // (x1 x x2) + (y1 x y2) + (z1 x z2) = 0
+        // -(x1 x x2) - (y1 x y2) = (z1 x z2)
+        if (x2 == 0) x2 = -x1;
+        if (y2 == 0) y2 = -y1;
+        double dotX = x1 * x2;
+        double dotY = y1 * y2;
+        double dotZ = -dotX - dotY;
+        double z2 = dotZ / z1;
+        return (-x1, -y1, z2);
     }
     
 }

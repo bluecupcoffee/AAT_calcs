@@ -45,4 +45,13 @@ public class CoordinateTests
         double dist = Mapping.GpsCoordinateDistance(aLat, aLon, aH, bLat, bLon, bH);
         Assert.That(dist, Is.EqualTo(expectedDist).Within(1E-1));
     }
+
+    [Test]
+    [TestCase(1, 0, 5, 10, 3, -2)]
+    [TestCase(-783853.6869, 4404581.265, 4530773.044, 783853.6869, -4404581.265, 4417516.0680)]
+    public void Perpendicular3DVectorZAligned_Test(double x1, double y1, double z1, double x2, double y2, double expectedZ)
+    {
+        var res = Mapping.Perpendicular3DVectorSolveFor2NdZ(x1, y1, z1, x2, y2);
+        Assert.That(res.Z, Is.EqualTo(expectedZ).Within(1E-1));
+    }
 }
