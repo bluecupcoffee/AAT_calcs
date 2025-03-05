@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+﻿using System.Numerics;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
 
 namespace AAT_calcs;
@@ -54,4 +55,17 @@ public class CoordinateTests
         var res = Mapping.Perpendicular3DVectorSolveFor2NdZ(x1, y1, z1, x2, y2);
         Assert.That(res.Z, Is.EqualTo(expectedZ).Within(1E-1));
     }
+
+    [Test]
+    [TestCase(3194419.1486278246, 3194419.1486278246, 4487348.393765133, 0.501676387556787, 0.501676387556787, 0.70472803572438215144802821842208)]
+    public void NormalizedDoubleToFloat_Test(double x, double y, double z, double expectedX, double expectedY,
+        double expectedZ)
+    {
+
+        var v = Vector3.Normalize(new Vector3((float)x, (float)y, (float)z));
+        Assert.That(v.X, Is.EqualTo(expectedX).Within(1E-7));
+        Assert.That(v.Y, Is.EqualTo(expectedY).Within(1E-7));
+        Assert.That(v.Z, Is.EqualTo(expectedZ).Within(1E-7));
+    }
+    
 }
